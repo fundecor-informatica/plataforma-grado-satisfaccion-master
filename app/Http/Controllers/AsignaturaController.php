@@ -21,12 +21,7 @@ class AsignaturaController extends Controller
     public function index()
     {
         $asignaturas = Asignatura::all();
-        /*$allprojects = DB::table('encuestas_asignatura_user')
-            ->join('users','users.id','=','encuestas_asignatura_user.estudiante_id')
-            ->join('asignaturas','asignaturas.id','=','encuestas_asignatura_user.asignatura_id')
-            ->select('users.name as estudiante', 'asignaturas.id as asignatura', 'encuestas_asignatura_user.estado')
-            ->get();*/
-
+        
         $rol_estudiante = Role::where('slug','=','student')->first();
 
         $estudiantes = User::join('role_user','users.id','=','role_user.user_id')
