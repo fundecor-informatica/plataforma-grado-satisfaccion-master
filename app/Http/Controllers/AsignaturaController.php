@@ -21,7 +21,7 @@ class AsignaturaController extends Controller
     public function index()
     {
         $asignaturas = Asignatura::all();
-        
+
         $rol_estudiante = Role::where('slug','=','student')->first();
 
         $estudiantes = User::join('role_user','users.id','=','role_user.user_id')
@@ -29,14 +29,20 @@ class AsignaturaController extends Controller
             ->select('users.id as id_estudiante','users.name as nombre_estudiante')
             ->get();
 
-        $asignaturasUsuario = AsignaturaUser::join('users','users.id','=','encuestas_asignatura_user.estudiante_id')
+        $asignaturasUsuarios = AsignaturaUser::join('users','users.id','=','encuestas_asignatura_user.estudiante_id')
             ->join('asignaturas','asignaturas.id','=','encuestas_asignatura_user.asignatura_id')
             ->select('users.id as id_estudiante','users.name as estudiante', 'asignaturas.id as asignatura', 'encuestas_asignatura_user.estado')
             ->get();
 
+        $asignaturaUsuario = AsignaturaUser::join('users','users.id','=','encuestas_asignatura_user.estudiante_id')
+            ->join('asignaturas','asignaturas.id','=','encuestas_asignatura_user.asignatura_id')
+            ->where('users.id', Auth::id())
+            ->select('users.id as id_estudiante','users.name as estudiante', 'asignaturas.id as id_asignatura', 'asignaturas.name as nombre_asignatura' , 'encuestas_asignatura_user.estado as estado_asignatura')
+            ->get();
+
         //$asignaturasUsuario = AsignaturaUser::all()->sortBy(['estudiante_id','desc'],['asignatura_id','desc']);
 
-        return view('home',compact('asignaturas','estudiantes','asignaturasUsuario'));
+        return view('home',compact('asignaturas','estudiantes','asignaturasUsuarios','asignaturaUsuario'));
     }
 
     /**

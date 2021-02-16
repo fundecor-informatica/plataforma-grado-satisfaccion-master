@@ -140,6 +140,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <i class="fas fa-th-large"></i>
                 </a>
             </li>
+            <li class="nav-item">
+                <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    <i class="fas fa-sign-out-alt"></i>
+                </a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                      style="display: none;">
+                    @csrf
+                </form>
+            </li>
         </ul>
     </nav>
     <!-- /.navbar -->
@@ -245,19 +254,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <div class="content-header">
-            <div class="container-fluid">
+            <!--<div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
                         <h1 class="m-0">Starter Page</h1>
-                    </div><!-- /.col -->
+                    </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="#">Home</a></li>
                             <li class="breadcrumb-item active">Starter Page</li>
                         </ol>
-                    </div><!-- /.col -->
-                </div><!-- /.row -->
-            </div><!-- /.container-fluid -->
+                    </div>
+                </div>
+            </div> -->
         </div>
         <!-- /.content-header -->
 
@@ -265,27 +274,26 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-lg-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Listado Asignaturas</h3>
-                            </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Listado Asignaturas (Ambos)</h3>
+                        </div>
                             <!-- /.card-header -->
-                            <div class="card-body">
-                                <table class="table table-bordered">
-                                    <thead>
+                        <div class="card-body">
+                            <table class="table table-bordered">
+                                <thead>
                                     <tr>
                                         <th style="width: 10px">#</th>
                                         <th>Asignatura</th>
                                         <th>Progreso </th>
                                         <th style="width: 40px">%</th>
                                     </tr>
-                                    </thead>
-                                    <tbody>
-                                    @foreach($asignaturas as $asignatura)
-                                        @php
-                                            $num_asignaturas_encuestadas = rand(10, 100);
-                                        @endphp
+                                </thead>
+                                <tbody>
+                                @foreach($asignaturas as $asignatura)
+                                    @php
+                                        $num_asignaturas_encuestadas = rand(10, 100);
+                                    @endphp
                                     <tr>
                                         <td>{{ $asignatura->id }}</td>
                                         <td>{{ $asignatura->name }}</td>
@@ -312,92 +320,242 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                             <td><span class="badge bg-success">{{ $num_asignaturas_encuestadas }}%</span></td>
                                         @endif
                                     </tr>
-                                    @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                            <!-- /.card-body -->
-                            <div class="card-footer clearfix">
-                                <ul class="pagination pagination-sm m-0 float-right">
-                                    <li class="page-item"><a class="page-link" href="#">«</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">»</a></li>
-                                </ul>
-                            </div>
+                                @endforeach
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Listado Estudiantes Asignaturas</h3>
-                                <div class="card-tools">
-                                    <div class="input-group input-group-sm" style="width: 150px;">
-                                        <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
-
-                                            <div class="input-group-append">
-                                                <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
-                                            </div>
-                                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-footer clearfix">
+                            <ul class="pagination pagination-sm m-0 float-right">
+                                <li class="page-item"><a class="page-link" href="#">«</a></li>
+                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item"><a class="page-link" href="#">»</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Listado Estudiantes Asignaturas  (Director Máster)</h3>
+                            <div class="card-tools">
+                                <div class="input-group input-group-sm" style="width: 150px;">
+                                    <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+                                    <div class="input-group-append">
+                                        <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
                                     </div>
                                 </div>
-                                <!-- /.card-header -->
-                                <div class="card-body table-responsive p-0" style="height: 300px;">
-                                    <table class="table table-head-fixed">
-                                        <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Estudiante</th>
-                                            @foreach($asignaturas as $asignatura)
-                                                <th>{{ $asignatura->name }}</th>
-                                            @endforeach
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        @foreach($estudiantes as $estudiante)
-                                            <tr>
-                                                <td><i class="fas fa-user"></i></td>
-                                                <td>{{ $estudiante->nombre_estudiante }}</td>
-                                            @foreach($asignaturas as $asignatura)
-                                                @foreach($asignaturasUsuario as $asignaturaUsuario)
-                                                    @if($asignatura->id == $asignaturaUsuario->asignatura and $estudiante->id_estudiante == $asignaturaUsuario->id_estudiante)
-                                                        <td>{{ $asignaturaUsuario->estado }}</td>
-                                                    @endif
-                                                @endforeach
-                                            @endforeach
-                                            </tr>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body table-responsive p-0" style="height: 300px;">
+                            <table class="table table-head-fixed">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Estudiante</th>
+                                        @foreach($asignaturas as $asignatura)
+                                            <th>{{ $asignatura->name }}</th>
                                         @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($estudiantes as $estudiante)
+                                    <tr>
+                                        <td><i class="fas fa-user"></i></td>
+                                        <td>{{ $estudiante->nombre_estudiante }}</td>
+                                        @foreach($asignaturas as $asignatura)
+                                            @foreach($asignaturasUsuarios as $asignaturasUsuario)
+                                                @if($asignatura->id == $asignaturasUsuario->asignatura and $estudiante->id_estudiante == $asignaturasUsuario->id_estudiante)
+                                                    <td>{{ $asignaturasUsuario->estado }}</td>
+                                                @endif
+                                            @endforeach
+                                        @endforeach
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                                 <!-- /.card-body -->
                             </div>
                         </div><!-- /.card -->
                     </div>
                     <!-- /.col-md-6 -->
-                    <div class="col-lg-6">
-                        <div class="card">
+                    <div class="card">
                             <div class="card-header">
-                                <h5 class="m-0">Featured</h5>
+                                <h3 class="card-title">Listado Asignaturas Estudiante (Estudiante)</h3>
                             </div>
+                            <!-- /.card-header -->
                             <div class="card-body">
-                                <h6 class="card-title">Special title treatment</h6>
-
-                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                                <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                                    <div class="col-sm-12">
+                                        <table id="example1" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
+                                            <thead>
+                                                <tr role="row">
+                                                    <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 170px;">#</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 219px;">Asignatura</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 194px;">Estado</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            @foreach($asignaturaUsuario as $usuarioAsignatura)
+                                                <tr role="row" class="even">
+                                                    <td>{{ $usuarioAsignatura->id_asignatura }}</td>
+                                                    <td>{{ $usuarioAsignatura->nombre_asignatura }}</td>
+                                                    <td>{{ $usuarioAsignatura->estado_asignatura }}</td>
+                                                </tr>
+                                            @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="card card-primary card-outline">
-                            <div class="card-header">
-                                <h5 class="m-0">Featured</h5>
-                            </div>
-                            <div class="card-body">
-                                <h6 class="card-title">Special title treatment</h6>
+                <div class="card">
+                    <div class="card-header font-weight-bold bg-dark text-white">Asignatura : XXXXXXX</div>
+                    <blockquote>
+                        <p>A continuación se presentan una serie de cuestiones relativas a la docencia en esta asignatura. Su colaboración es necesaria y consiste en <b>señalar con una “X” dentro del recuadro correspondiente</b>, su grado de acuerdo con cada una de las afirmaciones, teniendo en cuenta que <b>“1”</b> significa <b>“TOTALMENTE EN DESACUERDO”</b> Y <b>“5” “TOTALMENTE DE ACUERDO”</b>. La encuesta es anónima y los datos serán tratados de forma totalmente confidencial. Si el enunciado no procede o no tiene suficiente información para contestar marque la opción <b>NS/NC</b>.</p>
+                    </blockquote>
+                    <div class="card-body">
+                        <!--<form action="route('encuesta.update', ['encuestum' => $encuesta->id , 'block' => 1])" method="post">-->
+                            @csrf
+                            @method('PATCH')
+                            <div class="form-group">
+                                <p class="font-weight-bold">1. Los contenidos de la asignatura se adecúan al contexto del Máster</p>
+                                <input type="radio" class="btn-check" name="pregunta_1" id="pregunta_1_1" autocomplete="off" value="1">
+                                <label class="btn btn-outline-primary" for="pregunta_1_1">1</label>
 
-                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                                <input type="radio" class="btn-check" name="pregunta_1" id="pregunta_1_2" autocomplete="off" value="2">
+                                <label class="btn btn-outline-primary" for="pregunta_1_2">2</label>
+
+                                <input type="radio" class="btn-check" name="pregunta_1" id="pregunta_1_3" autocomplete="off" value="3">
+                                <label class="btn btn-outline-primary" for="pregunta_1_3">3</label>
+
+                                <input type="radio" class="btn-check" name="pregunta_1" id="pregunta_1_4" autocomplete="off" value="4">
+                                <label class="btn btn-outline-primary" for="pregunta_1_4">4</label>
+
+                                <input type="radio" class="btn-check" name="pregunta_1" id="pregunta_1_5" autocomplete="off" value="5">
+                                <label class="btn btn-outline-primary" for="pregunta_1_5">5</label>
+
+                                <input type="radio" class="btn-check" name="pregunta_1" id="pregunta_1_6" autocomplete="off" value="NS/NC">
+                                <label class="btn btn-outline-primary" for="pregunta_1_6">NS/NC</label>
                             </div>
-                        </div>
+                            <div class="form-group">
+                                <p class="font-weight-bold">2. El profesorado organiza bien las actividades que se realizan en clase, explica con claridad y resalta los contenidos importantes</p>
+                                <input type="radio" class="btn-check" name="pregunta_2" id="pregunta_2_1" autocomplete="off" value="1">
+                                <label class="btn btn-outline-primary" for="pregunta_2_1">1</label>
+
+                                <input type="radio" class="btn-check" name="pregunta_2" id="pregunta_2_2" autocomplete="off" value="2">
+                                <label class="btn btn-outline-primary" for="pregunta_2_2">2</label>
+
+                                <input type="radio" class="btn-check" name="pregunta_2" id="pregunta_2_3" autocomplete="off" value="3">
+                                <label class="btn btn-outline-primary" for="pregunta_2_3">3</label>
+
+                                <input type="radio" class="btn-check" name="pregunta_2" id="pregunta_2_4" autocomplete="off" value="4">
+                                <label class="btn btn-outline-primary" for="pregunta_2_4">4</label>
+
+                                <input type="radio" class="btn-check" name="pregunta_2" id="pregunta_2_5" autocomplete="off" value="5">
+                                <label class="btn btn-outline-primary" for="pregunta_2_5">5</label>
+
+                                <input type="radio" class="btn-check" name="pregunta_2" id="pregunta_2_6" autocomplete="off" value="NS/NC">
+                                <label class="btn btn-outline-primary" for="pregunta_2_6">NS/NC</label>
+                            </div>
+
+                            <div class="form-group">
+                                <p class="font-weight-bold">3. El profesorado ha fomentado un clima de trabajo y participación</p>
+                                <input type="radio" class="btn-check" name="pregunta_3" id="pregunta_3_1" autocomplete="off" value="1">
+                                <label class="btn btn-outline-primary" for="pregunta_3_1">1</label>
+
+                                <input type="radio" class="btn-check" name="pregunta_3" id="pregunta_3_2" autocomplete="off" value="2">
+                                <label class="btn btn-outline-primary" for="pregunta_3_2">2</label>
+
+                                <input type="radio" class="btn-check" name="pregunta_3" id="pregunta_3_3" autocomplete="off" value="3">
+                                <label class="btn btn-outline-primary" for="pregunta_3_3">3</label>
+
+                                <input type="radio" class="btn-check" name="pregunta_3" id="pregunta_3_4" autocomplete="off" value="4">
+                                <label class="btn btn-outline-primary" for="pregunta_3_4">4</label>
+
+                                <input type="radio" class="btn-check" name="pregunta_3" id="pregunta_3_5" autocomplete="off" value="5">
+                                <label class="btn btn-outline-primary" for="pregunta_3_5">5</label>
+
+                                <input type="radio" class="btn-check" name="pregunta_3" id="pregunta_3_6" autocomplete="off" value="NS/NC">
+                                <label class="btn btn-outline-primary" for="pregunta_3_6">NS/NC</label>
+                            </div>
+
+                            <div class="form-group">
+                                <p class="font-weight-bold">4. Las actividades prácticas le han resultado de interés y acordes con los contenidos de la asignatura</p>
+                                <input type="radio" class="btn-check" name="pregunta_4" id="pregunta_4_1" autocomplete="off" value="1">
+                                <label class="btn btn-outline-primary" for="pregunta_4_1">1</label>
+
+                                <input type="radio" class="btn-check" name="pregunta_4" id="pregunta_4_2" autocomplete="off" value="2">
+                                <label class="btn btn-outline-primary" for="pregunta_4_2">2</label>
+
+                                <input type="radio" class="btn-check" name="pregunta_4" id="pregunta_4_3" autocomplete="off" value="3">
+                                <label class="btn btn-outline-primary" for="pregunta_4_3">3</label>
+
+                                <input type="radio" class="btn-check" name="pregunta_4" id="pregunta_4_4" autocomplete="off" value="4">
+                                <label class="btn btn-outline-primary" for="pregunta_4_4">4</label>
+
+                                <input type="radio" class="btn-check" name="pregunta_4" id="pregunta_4_5" autocomplete="off" value="5">
+                                <label class="btn btn-outline-primary" for="pregunta_4_5">5</label>
+
+                                <input type="radio" class="btn-check" name="pregunta_4" id="pregunta_4_6" autocomplete="off" value="NS/NC">
+                                <label class="btn btn-outline-primary" for="pregunta_4_6">NS/NC</label>
+                            </div>
+
+                            <div class="form-group">
+                                <p class="font-weight-bold">5. Los criterios y sistemas de evaluación me parecen adecuados</p>
+                                <input type="radio" class="btn-check" name="pregunta_5" id="pregunta_5_1" autocomplete="off" value="1">
+                                <label class="btn btn-outline-primary" for="pregunta_5_1">1</label>
+
+                                <input type="radio" class="btn-check" name="pregunta_5" id="pregunta_5_2" autocomplete="off" value="2">
+                                <label class="btn btn-outline-primary" for="pregunta_5_2">2</label>
+
+                                <input type="radio" class="btn-check" name="pregunta_5" id="pregunta_5_3" autocomplete="off" value="3">
+                                <label class="btn btn-outline-primary" for="pregunta_5_3">3</label>
+
+                                <input type="radio" class="btn-check" name="pregunta_5" id="pregunta_5_4" autocomplete="off" value="4">
+                                <label class="btn btn-outline-primary" for="pregunta_5_4">4</label>
+
+                                <input type="radio" class="btn-check" name="pregunta_5" id="pregunta_5_5" autocomplete="off" value="5">
+                                <label class="btn btn-outline-primary" for="pregunta_5_5">5</label>
+
+                                <input type="radio" class="btn-check" name="pregunta_5" id="pregunta_5_6" autocomplete="off" value="NS/NC">
+                                <label class="btn btn-outline-primary" for="pregunta_5_6">NS/NC</label>
+                            </div>
+
+                            <div class="form-group">
+                                <p class="font-weight-bold">6. Estoy satisfecho/a con la labor docente del profesorado de esta asignatura</p>
+                                <input type="radio" class="btn-check" name="pregunta_6" id="pregunta_6_1" autocomplete="off" value="1">
+                                <label class="btn btn-outline-primary" for="pregunta_6_1">1</label>
+
+                                <input type="radio" class="btn-check" name="pregunta_6" id="pregunta_6_2" autocomplete="off" value="2">
+                                <label class="btn btn-outline-primary" for="pregunta_6_2">2</label>
+
+                                <input type="radio" class="btn-check" name="pregunta_6" id="pregunta_6_3" autocomplete="off" value="3">
+                                <label class="btn btn-outline-primary" for="pregunta_6_3">3</label>
+
+                                <input type="radio" class="btn-check" name="pregunta_6" id="pregunta_6_4" autocomplete="off" value="4">
+                                <label class="btn btn-outline-primary" for="pregunta_6_4">4</label>
+
+                                <input type="radio" class="btn-check" name="pregunta_6" id="pregunta_6_5" autocomplete="off" value="5">
+                                <label class="btn btn-outline-primary" for="pregunta_6_5">5</label>
+
+                                <input type="radio" class="btn-check" name="pregunta_6" id="pregunta_6_6" autocomplete="off" value="NS/NC">
+                                <label class="btn btn-outline-primary" for="pregunta_6_6">NS/NC</label>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="font-weight-bold" for="comentarios">Si se desea, añadir cualquier comentario adicional sobre la asignatura:</label>
+                                <textarea class="form-control form-area" name="comentarios" id="comentarios" rows="5" cols="100"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary mt-3">Enviar Encuesta</button>
+                        </form>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+            </div>
                     </div>
                     <!-- /.col-md-6 -->
                 </div>

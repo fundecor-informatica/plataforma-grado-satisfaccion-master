@@ -14,8 +14,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/test', function () {
-    return \App\Models\User::get();
-});
+    return view('test');
+})->name('test');
 
 
 Route::get('/', function () {
@@ -25,6 +25,19 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::group(['middleware' => 'auth'], function() {
-    //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-    Route::get('/home', [App\Http\Controllers\AsignaturaController::class, 'index'])->name('home');
+    //Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::get('/home', 'DirectorController@index')->name('director.home');
 });
+
+Route::group(['prefix' => 'student'], function() {
+    Route::get('/home', 'EstudianteController@index')->name('student.home');
+    Route::get('/', 'EstudianteController@index');
+    Route::get('{asignatura}/encuesta-asignatura', 'EstudianteController@encuestaAsignatura')->name('encuesta.asignatura.view');
+    Route::patch('{id_encuesta}/encuesta-asignatura', 'EstudianteController@guardarEncuestaAsignatura')->name('encuesta.asignatura.store');
+});
+
+Route::get('/listado-encuestas-asignaturas', 'DirectorController@encuestasAsignaturas')->name('encuestas.asignaturas.view');
+
+Route::resource('director', 'DirectorController');
+Route::resource('tutorEntidad', 'EstudianteController');
+Route::resource('tutorAcademico', 'EstudianteController');
